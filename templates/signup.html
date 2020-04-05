@@ -11,7 +11,7 @@
 
 
 
-<!-- Login form -->
+<!-- Sign Up form -->
 <!-- by Raj78 https://bootsnipp.com/snippets/dldxB -->
 <div class="wrapper fadeInDown">
   <div id="formContent">
@@ -21,12 +21,14 @@
       <img src="../static/pics/book.png" id="icon" alt="Book Reviews" />
     </div>
 
-    <!-- Login Form -->
+    <!-- Sign up Form -->
     <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Username">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="Password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-	  <p>Not yet a member? <a href="{{ url_for('signup') }}">Sign up</a>!</p>
+	  <input type="text" id="email" class="fadeIn second" name="login" placeholder="Email" required>
+      <input type="text" id="login" class="fadeIn third" name="login" placeholder="Username" required>
+      <input type="text" id="password" class="fadeIn fourth" name="login" placeholder="Password">
+	        <input type="text" id="password" class="fadeIn fifth" name="login" placeholder="Password again">
+      <input type="submit" class="fadeIn sixth" value="Log In">
+	  <p>Already a member? <a href="{{ url_for('index') }}">Log in</a>!</p>
     </form>
 
   </div>
