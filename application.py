@@ -31,3 +31,6 @@ def index():
 def signup():
     return render_template("signup.html", website_title=website_title)
 
+@app.route("/mypage")
+def mypage():
+    return render_template("mypage.html", website_title=website_title)
