@@ -20,12 +20,14 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+# Site name
+website_title = "Book Reviews"
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", website_title=website_title)
 	
 @app.route("/signup")
 def signup():
-    return render_template("signup.html")
+    return render_template("signup.html", website_title=website_title)
 
