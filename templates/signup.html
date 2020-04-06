@@ -26,9 +26,9 @@
     <form action="{{ url_for('mypage') }}" method="post">
 	  <input type="text" id="email" class="fadeIn second" name="login" placeholder="Email" required>
       <input type="text" id="login" class="fadeIn third" name="login" placeholder="Username" required>
-      <input type="text" id="password" class="fadeIn fourth" name="login" placeholder="Password">
-	        <input type="text" id="password" class="fadeIn fifth" name="login" placeholder="Password again">
-      <input type="submit" class="fadeIn sixth" value="Log In">
+      <input type="text" id="password" class="fadeIn fourth" name="login" placeholder="Password" required>
+	        <input type="text" id="password" class="fadeIn fifth" name="login" placeholder="Password again" required>
+      <input type="submit" class="fadeIn sixth" value="Sign up">
 	  <p>Already a member? <a href="{{ url_for('index') }}">Log in</a>!</p>
     </form>
 
