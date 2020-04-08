@@ -35,17 +35,16 @@ def signup():
 @app.route("/mypage", methods=["POST"])
 def mypage():
 
-    # SIGN UP A NEW USER
-    # This is assuming you come from submitting the Signup Form
+    # REGISTER A NEW USER
     # TODO: How to differentiate between login/signup form submissions?
     
-    # Collect info from the sign up form
+    # Collect info from the signup form
     input_email = request.form.get("email")
     input_username = request.form.get("username")
     input_password = request.form.get("password")
     input_password2 = request.form.get("password2")
     
-    # Create user class
+    # Create the User class
     class User:
         def __init__(self, email, username, password, password2):
             self.email = input_email
@@ -54,6 +53,6 @@ def mypage():
             self.password2 = input_password2
         
     # Create an instance of the user class and fill it with the submitted form's data
-    user = User(input_email, input_username, input_password, input_password2)            
+    user = User(input_email, input_username, input_password, input_password2)
 
     return render_template("mypage.html", website_title=website_title)
