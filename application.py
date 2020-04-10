@@ -2,6 +2,8 @@ import os
 
 from flask import Flask, session, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 app = Flask(__name__)
 
@@ -43,7 +45,7 @@ def mypage():
     # Create the User class
     class User(db.Model):
         __tablename__ = "users"
-        id = db.Column(db.Integer, primary_key=True)
+        id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
         email = db.Column(db.String, nullable=False)
         username = db.Column(db.String, nullable=False) 
         password = db.Column(db.String, nullable=False)
