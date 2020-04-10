@@ -33,10 +33,12 @@ def signup():
 @app.route("/mypage", methods=["POST"])
 def mypage():
 
+    # Check if the user is logging or signing up
     form_type = request.form.get("form_type")
     if form_type == "login":
         #TODO: LOG THE USER IN
-        print("LOGIN")
+        input_username = request.form.get("username")
+        input_password = request.form.get("password")
 
     if form_type == "signup":
         # REGISTER A NEW USER
