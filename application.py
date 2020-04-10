@@ -39,16 +39,21 @@ def mypage():
     input_username = request.form.get("username")
     input_password = request.form.get("password")
     input_password2 = request.form.get("password2")
-    
-    # Create the User class
-    class User:
-        def __init__(self, email, username, password, password2):
-            self.email = input_email
-            self.username = input_username
-            self.password = input_password
-            self.password2 = input_password2
-        
-    # Create an instance of the user class and fill it with the submitted form's data
-    user = User(input_email, input_username, input_password, input_password2)
 
+    # Create the User class
+    class User(db.Model):
+        __tablename__ = "users"
+        id = db.Column(db.Integer, primary_key=True)
+        email = db.Column(db.String, nullable=False)
+        username = db.Column(db.String, nullable=False) 
+        password = db.Column(db.String, nullable=False)
+        password2 = db.Column(db.String, nullable=False)
+
+    # Create an instance of the user class and fill it with the submitted form's data
+    user = User(email=input_email, username=input_username, password=input_password, password2=input_password2)
+
+    # Write the new user info to db
+    db.session.add(user)
+    db.session.commit()
+    
     return render_template("mypage.html", website_title=website_title)
