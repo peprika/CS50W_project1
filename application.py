@@ -48,6 +48,9 @@ def mypage():
         input_username = request.form.get("username")
         input_password = request.form.get("password")
         input_password2 = request.form.get("password2")
+        
+        if input_password != input_password2:
+            return render_template("error.html", error_msg="The passwords do not match. Go back and try again.")
 
         # Create the User class
         class User(db.Model):
@@ -56,10 +59,9 @@ def mypage():
             email = db.Column(db.String, nullable=False)
             username = db.Column(db.String, nullable=False) 
             password = db.Column(db.String, nullable=False)
-            password2 = db.Column(db.String, nullable=False)
 
         # Create an instance of the user class and fill it with the submitted form's data
-        user = User(email=input_email, username=input_username, password=input_password, password2=input_password2)
+        user = User(email=input_email, username=input_username, password=input_password)
 
         # Write the new user info to db
         db.session.add(user)
