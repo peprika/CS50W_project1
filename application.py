@@ -4,6 +4,7 @@ from flask import Flask, session, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
+import re
 
 app = Flask(__name__)
 
@@ -49,7 +50,14 @@ def mypage():
         input_password = request.form.get("password")
         input_password2 = request.form.get("password2")
         
-        # Check if the passwords match
+        #Check that form info is valid
+        email_regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+        if (re.search(email_regex, input_email)) is None:
+            return render_template("error.html", error_msg="The email is invalid. Please go back and check you typed it correctly.")
+        if len(input_email) > 320:
+            return render_template("error.html", error_msg="The email is too long. Use max 320 characters.")
+        if len(input_username) > 16:
+            return render_template("error.html", error_msg="The username is too long. Use max 16 characters.")
         if input_password != input_password2:
             return render_template("error.html", error_msg="The passwords do not match. Go back and try again.")
 
@@ -60,7 +68,15 @@ def mypage():
             email = db.Column(db.String, nullable=False)
             username = db.Column(db.String, nullable=False) 
             password = db.Column(db.String, nullable=False)
-
+        
+        # Check that the email and username are available
+        email_exists = db.session.query(db.exists().where(User.email == input_email)).scalar()
+        username_exists = db.session.query(db.exists().where(User.username == input_username)).scalar()
+        if email_exists:
+            return render_template("error.html", error_msg="This email has already been registered. Go back and try again.")
+        if username_exists:
+            return render_template("error.html", error_msg="Username already exists. Go back and try again.")
+            
         # Create an instance of the user class and fill it with the submitted form's data
         user = User(email=input_email, username=input_username, password=input_password)
 
