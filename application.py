@@ -49,6 +49,7 @@ def mypage():
         input_password = request.form.get("password")
         input_password2 = request.form.get("password2")
         
+        # Check if the passwords match
         if input_password != input_password2:
             return render_template("error.html", error_msg="The passwords do not match. Go back and try again.")
 
