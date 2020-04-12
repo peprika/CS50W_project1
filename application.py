@@ -47,14 +47,22 @@ def mypage():
     # Check if the user is logging or signing up
     form_type = request.form.get("form_type")
     if form_type == "login":
-        #TODO: LOG THE USER IN
+        # LOG THE USER IN
+        
+        # Get the login form data
         input_username = request.form.get("username")
         input_password = request.form.get("password")
         
-        # Check that the username exists:
+        # Check that the username exists
         username_exists = db.session.query(db.exists().where(User.username == input_username)).scalar()
         if username_exists:
-            print("USERNAME FOUND")
+        
+            # Check that the password is correct
+            user_info = db.session.query(User).filter(User.username == input_username).first()
+            if check_password_hash(user_info.password, input_password):
+                return render_template("mypage.html", website_title=website_title)
+            else:
+                return render_template("error.html", error_msg="Incorrect password. Go back and try again.")
         else:
             return render_template("error.html", error_msg="The username does not exist. Go back and try again.")
 
