@@ -3,6 +3,7 @@ import os
 from flask import Flask, session, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
+from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 import re
 
@@ -50,7 +51,7 @@ def mypage():
         input_password = request.form.get("password")
         input_password2 = request.form.get("password2")
         
-        #Check that form info is valid
+        # Check that form info is valid
         email_regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
         if (re.search(email_regex, input_email)) is None:
             return render_template("error.html", error_msg="The email is invalid. Please go back and check you typed it correctly.")
@@ -76,9 +77,12 @@ def mypage():
             return render_template("error.html", error_msg="This email has already been registered. Go back and try again.")
         if username_exists:
             return render_template("error.html", error_msg="Username already exists. Go back and try again.")
-            
+        
+        # Hash the password
+        pw_hash = generate_password_hash(input_password, method='pbkdf2:sha256', salt_length=8)
+        
         # Create an instance of the user class and fill it with the submitted form's data
-        user = User(email=input_email, username=input_username, password=input_password)
+        user = User(email=input_email, username=input_username, password=pw_hash)
 
         # Write the new user info to db
         db.session.add(user)
