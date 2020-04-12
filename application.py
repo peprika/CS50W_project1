@@ -66,13 +66,14 @@ def mypage():
         return render_template("index.html", website_title=website_title)
         
     if request.method == "POST":
+   
+        session.clear()
+            
         # Check if the user is logging or signing up
         form_type = request.form.get("form_type")
         
         if form_type == "login":
             # LOG THE USER IN
-            
-            session.clear()
             
             # Get the login form data
             input_username = request.form.get("username")
@@ -95,8 +96,6 @@ def mypage():
 
         if form_type == "signup":
             # REGISTER A NEW USER
-            
-            session.clear()
             
             # Collect info from the signup form
             input_email = request.form.get("email")
