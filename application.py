@@ -31,6 +31,22 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False) 
     password = db.Column(db.String, nullable=False)
     
+# Create the Book class
+class Book(db.Model):
+    __tablename__ = "books"
+    isbn = db.Column(db.String, primary_key=True, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    author = db.Column(db.String, nullable=False) 
+    year = db.Column(db.Integer, nullable=False)
+
+# Create the Review class
+class Review(db.Model):
+    __tablename__ = "reviews"
+    review_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
+    user_id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, nullable=False)
+    isbn = db.Column(db.String, nullable=False) 
+    rating = db.Column(db.Integer, nullable=False)
+    
 
 @app.route("/")
 def index():
