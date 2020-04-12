@@ -23,6 +23,15 @@ db.init_app(app)
 # Site name
 website_title = "Book Reviews"
 
+# Create the User class
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
+    email = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False) 
+    password = db.Column(db.String, nullable=False)
+    
+
 @app.route("/")
 def index():
     return render_template("index.html", website_title=website_title)
@@ -41,6 +50,13 @@ def mypage():
         #TODO: LOG THE USER IN
         input_username = request.form.get("username")
         input_password = request.form.get("password")
+        
+        # Check that the username exists:
+        username_exists = db.session.query(db.exists().where(User.username == input_username)).scalar()
+        if username_exists:
+            print("USERNAME FOUND")
+        else:
+            return render_template("error.html", error_msg="The username does not exist. Go back and try again.")
 
     if form_type == "signup":
         # REGISTER A NEW USER
@@ -61,14 +77,6 @@ def mypage():
             return render_template("error.html", error_msg="The username is too long. Use max 16 characters.")
         if input_password != input_password2:
             return render_template("error.html", error_msg="The passwords do not match. Go back and try again.")
-
-        # Create the User class
-        class User(db.Model):
-            __tablename__ = "users"
-            id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-            email = db.Column(db.String, nullable=False)
-            username = db.Column(db.String, nullable=False) 
-            password = db.Column(db.String, nullable=False)
         
         # Check that the email and username are available
         email_exists = db.session.query(db.exists().where(User.email == input_email)).scalar()
