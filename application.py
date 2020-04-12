@@ -8,6 +8,7 @@ import uuid
 import re
 
 app = Flask(__name__)
+app.secret_key = "super secret key"
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -71,6 +72,8 @@ def mypage():
         if form_type == "login":
             # LOG THE USER IN
             
+            session.clear()
+            
             # Get the login form data
             input_username = request.form.get("username")
             input_password = request.form.get("password")
@@ -82,6 +85,8 @@ def mypage():
                 # Check that the password is correct
                 user_info = db.session.query(User).filter(User.username == input_username).first()
                 if check_password_hash(user_info.password, input_password):
+                    # Log the user in, and redirect to mypage.html
+                    session["username"] = input_username
                     return render_template("mypage.html", website_title=website_title)
                 else:
                     return render_template("error.html", error_msg="Incorrect password. Go back and try again.")
@@ -90,6 +95,8 @@ def mypage():
 
         if form_type == "signup":
             # REGISTER A NEW USER
+            
+            session.clear()
             
             # Collect info from the signup form
             input_email = request.form.get("email")
@@ -125,5 +132,7 @@ def mypage():
             # Write the new user info to db
             db.session.add(user)
             db.session.commit()
-    
-    return render_template("mypage.html", website_title=website_title)
+            
+            # Log the user in, and redirect to mypage.html
+            session["username"] = input_username
+            return render_template("mypage.html", website_title=website_title)
