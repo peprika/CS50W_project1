@@ -60,15 +60,18 @@ def signup():
 @app.route("/mypage", methods=["GET", "POST"])
 def mypage():
 
+    # There are 3 ways the user can reach mypage.html: 1) GET 2) POST (logging in), and 3) POST (signing up)
+    # GET: Check if user is logged in; if yes, allow to view mypage
     if request.method == "GET":
-        # TODO: Check if user is logged in; if yes, allow to view mypage
-        return render_template("index.html", website_title=website_title)
-        
+        if not session:
+            return render_template("index.html", website_title=website_title)
+        else:
+            user_info = db.session.query(User).filter(User.username == session["username"]).first()
+            return render_template("mypage.html", website_title=website_title, user_info=user_info)
+    
+    # POST: Check if the user is logging or signing up
     if request.method == "POST":
-   
         session.clear()
-            
-        # Check if the user is logging or signing up
         form_type = request.form.get("form_type")
         
         if form_type == "login":
