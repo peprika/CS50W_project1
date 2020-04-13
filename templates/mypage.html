@@ -11,18 +11,23 @@
 {% block body %}
 
 		<div class="row">
-			<div class="col-6"><h1>My Profile</h1>
-            
-            <p>
-            Hello, {{ user_info.username }}!
-            </p>
-            
-            <p>
-            <a href="{{ url_for('logout') }}">Log out</a>
-            </p>
-            
+            <div class="col-12" align="center">
+                <img src="../static/pics/book.png" alt="Book Reviews" width="256" height="256" align="center"/>
             </div>
-			<div class="col-6"><h1>Search</h1></div>
+        
+        	<div class="col-2"></div>
+			<div class="col-4">
+                <h1>My Profile</h1>
+            
+                <p>Hello, {{ user_info.username }}!</p>
+            
+                <p>You have rated X books so far.</p>
+            
+                <p><a href="{{ url_for('logout') }}">Log out</a></p>
+            </div>
+            
+			<div class="col-4"><h1>Search</h1></div>
+            <div class="col-2"></div>
 		</div>
 
 {% endblock %}
