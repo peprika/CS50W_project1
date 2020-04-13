@@ -57,7 +57,6 @@ def index():
 def signup():
         return render_template("signup.html", website_title=website_title)
 
-
 @app.route("/mypage", methods=["GET", "POST"])
 def mypage():
 
@@ -90,9 +89,9 @@ def mypage():
                     session["username"] = input_username
                     return render_template("mypage.html", website_title=website_title, user_info=user_info)
                 else:
-                    return render_template("error.html", error_msg="Incorrect password. Go back and try again.")
+                    return error_page("Incorrect password. Go back and try again.")
             else:
-                return render_template("error.html", error_msg="The username does not exist. Go back and try again.")
+                return error_page("The username does not exists. Go back and try again.")
 
         if form_type == "signup":
             # REGISTER A NEW USER
@@ -106,21 +105,21 @@ def mypage():
             # Check that form info is valid
             email_regex = "^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
             if (re.search(email_regex, input_email)) is None:
-                return render_template("error.html", error_msg="The email is invalid. Please go back and check you typed it correctly.")
+                return error_page("The email is invalid. Please go back and check you typed it correctly.")
             if len(input_email) > 320:
-                return render_template("error.html", error_msg="The email is too long. Use max 320 characters.")
+                return error_page("The email is too long. Use max 320 characters.")
             if len(input_username) > 16:
-                return render_template("error.html", error_msg="The username is too long. Use max 16 characters.")
+                return error_page("The username is too long. Use max 16 characters.")
             if input_password != input_password2:
-                return render_template("error.html", error_msg="The passwords do not match. Go back and try again.")
+                return error_page("The passwords do not match. Go back and try again.")
             
             # Check that the email and username are available
             email_exists = db.session.query(db.exists().where(User.email == input_email)).scalar()
             username_exists = db.session.query(db.exists().where(User.username == input_username)).scalar()
             if email_exists:
-                return render_template("error.html", error_msg="This email has already been registered. Go back and try again.")
+                return error_page("This email has already been registered. Go back and try again.")
             if username_exists:
-                return render_template("error.html", error_msg="Username already exists. Go back and try again.")
+                return error_page("Username already exists. Go back and try again.")
             
             # Hash the password
             pw_hash = generate_password_hash(input_password, method='pbkdf2:sha256', salt_length=8)
@@ -140,3 +139,6 @@ def mypage():
 def logout():
         session.clear()
         return render_template("logout.html", website_title=website_title)
+        
+def error_page(error_msg):
+    return render_template("error.html", error_msg=error_msg)
