@@ -135,3 +135,8 @@ def mypage():
             # Log the user in, and redirect to mypage.html
             session["username"] = input_username
             return render_template("mypage.html", website_title=website_title)
+
+@app.route("/logout", methods=["GET"])
+def logout():
+        session.clear()
+        return render_template("logout.html", website_title=website_title)
