@@ -88,7 +88,7 @@ def mypage():
                 if check_password_hash(user_info.password, input_password):
                     # Log the user in, and redirect to mypage.html
                     session["username"] = input_username
-                    return render_template("mypage.html", website_title=website_title)
+                    return render_template("mypage.html", website_title=website_title, user_info=user_info)
                 else:
                     return render_template("error.html", error_msg="Incorrect password. Go back and try again.")
             else:
